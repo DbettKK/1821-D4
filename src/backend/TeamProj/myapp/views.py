@@ -31,7 +31,13 @@ class UserLogin(APIView):
                 'info': '参数不完整',
                 'code': 400
             })
-        user = User.objects.get(username=username)
+        try:
+            user = User.objects.get(username=username)
+        except:
+            return Response({
+                'info': '用户名不存在',
+                'code': 401
+            })
         if user.check_pwd(pwd):
             # 登录成功后生成token
             token = md5(username)
@@ -40,7 +46,7 @@ class UserLogin(APIView):
             return Response(res)
         else:
             return Response({
-                'info': '用户名或密码错误',
+                'info': '密码错误',
                 'code': 401
             })
 
