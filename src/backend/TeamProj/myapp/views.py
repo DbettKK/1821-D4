@@ -1,7 +1,7 @@
 from rest_framework.views import APIView, Response
 from rest_framework import generics
 from .models import User, UserToken
-from .serializers import UserInfoSer, CreateUserSer
+from .serializers import UserInfoSer
 import hashlib
 import time
 
