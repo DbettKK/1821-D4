@@ -51,11 +51,36 @@ class UserLogin(APIView):
             })
 
 
-class UserRegister(generics.CreateAPIView):
+class UserRegister(APIView):
     """用户注册视图"""
     authentication_classes = []
-    # 用户注册不需要认证
-    serializer_class = CreateUserSer
+
+    def post(self, request):
+        username = request.POST.get('username')
+        pwd = request.POST.get('password')
+        pwd2 = request.POST.get('password2')
+        email = request.POST.get('email')
+        phone_num = request.POST.get('phone_num')
+
+        if not all([username, pwd, pwd2, email, phone_num]):
+            return Response({
+                'info': '参数不完整',
+                'code': 400
+            })
+
+        if pwd != pwd2:
+            return Response({
+                'info': '两次密码不一致',
+                'code': 400
+            })
+        u = User.objects.create(
+            username=username,
+            password=pwd,
+            email=email,
+            phone_num=phone_num
+        )
+        res = {'info': 'success', 'code': 200, 'data': UserInfoSer(u).data}
+        return Response(res)
 
 
 class UserInfoList(generics.ListAPIView):
