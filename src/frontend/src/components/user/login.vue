@@ -36,7 +36,8 @@ export default {
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+          { min: 2, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+          // 因为数据库现在存的都是简单密码。。所以这里min先改成2，之后再改回来
         ]
       }
     }
@@ -45,18 +46,30 @@ export default {
   methods: {
     resetloginForm () {
       // console.log(this)
-      this.$refs.loginFormRef.resetFields()
+      this.$refs.loginFormRef.resetFields();
     },
+      login () {
+          this.$refs.loginFormRef.validate(async (valid) => {
+              if (!valid) return false;
+              // 缺少请求路径login
 
-    login () {
-      this.$refs.loginFormRef.validate(async (valid) => {
-        if (!valid) return
-        // 缺少请求路径login
-        const { data: res } = await this.$http.POST('login', this.loginForm)
-        if (res.meta.status !== 200) return console.log('登录失败')
-        console.log('登录成功')
-      })
-    }
+              const { data: res } = await this.$http.post('http://175.24.121.113:8000/myapp/login/',
+                  this.$qs.stringify(this.loginForm));
+              console.log(res);
+              if (res.code !== 200) return console.log('登录失败');
+              // 这里后端返回了一个code就先用code看看效果
+              console.log('登录成功');
+
+              // this.$http.post('http://175.24.121.113:8000/myapp/login/',
+              //     this.$qs.stringify(this.loginForm)
+              // ).then(function (res) {
+              //     console.log(res.data)
+              // }).catch(function (error) {
+              //     console.log(error)
+              // });
+          });
+      }
+
   }
 }
 </script>
