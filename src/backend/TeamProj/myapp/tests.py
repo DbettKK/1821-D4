@@ -7,7 +7,7 @@ from .models import User
 class UserMethodTest(TestCase):
     def test_register(self):
         """注册成功"""
-        res = post('http://127.0.0.1:8000/myapp/register/',
+        res = post('http://175.24.121.113:8000/myapp/register/',
              data={'username': 'lisi',
                    'password': '123',
                    'password2': '123',
@@ -17,7 +17,7 @@ class UserMethodTest(TestCase):
 
     def test_login_success(self):
         """登录成功"""
-        res = post('http://127.0.0.1:8000/myapp/login/',
+        res = post('http://175.24.121.113:8000/myapp/login/',
                    data={'username': 'lisi',
                          'password': '123'})
         print(str(res.content, encoding="gbk"))
