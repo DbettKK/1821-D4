@@ -6,7 +6,7 @@ class User(models.Model):
     """
     用户类
     """
-    username = models.CharField(max_length=32, verbose_name='用户名')
+    username = models.CharField(max_length=32, verbose_name='用户名', unique=True)
     password = models.CharField(max_length=128, verbose_name='password')
     phone_num = models.CharField(max_length=11, verbose_name='电话')
     email = models.EmailField()
