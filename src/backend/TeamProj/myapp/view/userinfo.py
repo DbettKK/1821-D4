@@ -1,6 +1,6 @@
 from rest_framework.views import APIView, Response
 from django.contrib.auth.hashers import make_password
-from myapp.models import User, UserToken
+from myapp.models import User
 from myapp.serializers import UserInfoSer
 from myapp.views import chk_token
 

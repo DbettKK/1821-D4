@@ -2,10 +2,9 @@ from rest_framework.views import APIView, Response
 from rest_framework import generics
 from .models import User, UserToken
 from .serializers import UserInfoSer
+from random import Random
 import hashlib
 import time
-
-
 
 
 def md5(user):
@@ -32,6 +31,21 @@ def chk_token(token):
     return u.get().user_id
 
 
+def random_str(randomlength=8):
+    """
+    随机字符串
+    :param randomlength: 字符串长度
+    :return: String 类型字符串
+    """
+    retstr = ''
+    chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
+    length = len(chars) - 1
+    random = Random()
+    for i in range(randomlength):
+        retstr += chars[random.randint(0, length)]
+    return retstr
+
+
 class UserInfoList(generics.ListAPIView):
     """用户详情页视图"""
     queryset = User.objects.all()
@@ -50,9 +64,9 @@ class Index(generics.ListAPIView):
 
 
 # 放后面防止循环导入发生冲突
-from .view.user import UserRegister, UserLogin, GetBackPassword,TestEmail,TestEmail2, random_str
+from .view.user import UserRegister, UserLogin, GetBackPassword, TestEmail, TestEmail2, random_str
 from .view.userinfo import UserChkOldPwd, UserInfo
-
+from .view.userfile import BrowseFile
 
 
 
