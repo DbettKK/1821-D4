@@ -1,3 +1,5 @@
+from django.contrib.auth.hashers import make_password
+
 from myapp.models import User, UserToken, EmailRecord
 from myapp.serializers import UserInfoSer
 from myapp.views import md5, random_str
@@ -5,8 +7,6 @@ from rest_framework.views import APIView, Response
 from django.conf import settings
 from django.core.mail import send_mail
 import datetime
-
-
 
 
 class UserLogin(APIView):
@@ -71,10 +71,10 @@ class UserRegister(APIView):
                 'code': 400
             },status=400)
         current_time = datetime.datetime.now()
-        if EmailRecord.objects.filter(email=email,code=code,exprie_time_gte=current_time, send_choice='register'):
+        if EmailRecord.objects.filter(email=email,code=code,exprie_time__gte=current_time, send_choice='register'):
             u = User.objects.create(
                 username=username,
-                password=pwd,
+                password=make_password(pwd),
                 email=email,
                 phone_num=phone_num,
                 isActive=True
@@ -91,7 +91,7 @@ class UserRegister(APIView):
 
 
 class GetBackPassword(APIView):
-    '找回密码类'
+    """找回密码类"""
     authentication_classes = []
 
     def post(self, request):
@@ -107,7 +107,7 @@ class GetBackPassword(APIView):
         current_time = datetime.datetime.now()
         if EmailRecord.objects.filter(email=email,code=code,exprie_time_gte=current_time, send_choice='findpassword'):
             user=User.objects.filter(username=username)
-            user.password = pwd_new
+            user.password = make_password(pwd_new)
             user.save()
             return Response(
                 {
@@ -127,7 +127,7 @@ class GetBackPassword(APIView):
 
 
 class TestEmail2(APIView):
-    '''找回密码的邮箱api'''
+    """找回密码的邮箱api"""
     authentication_classes = []
 
     def post(self, request):
@@ -143,9 +143,7 @@ class TestEmail2(APIView):
         receiver = [request.POST.get('email')]
         # 需要发送的带样式内容
         html_message = '<h1>金刚石文档提醒：您在修改账号密码</h1>' \
-                       '您本次修改的验证码为：{0},验证码将在5分钟后失效<br>'.format(code) \
- \
-            # 发送者
+                       '您本次修改的验证码为：{0},验证码将在5分钟后失效<br>'.format(code)
         sender = settings.EMAIL_FROM
         # 　发送邮件
         send_mail(subject, message, sender, receiver, html_message=html_message)
