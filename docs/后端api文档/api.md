@@ -86,6 +86,8 @@ POST
 
 用于用户注册
 
+注：注册之前需要先POST`http://175.24.121.113:8000/myapp/testemail`，并带上email参数，然后再post该api
+
 ##### 请求URL
 - ` http://175.24.121.113:8000/myapp/register `
   
