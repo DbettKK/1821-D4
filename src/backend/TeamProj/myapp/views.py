@@ -50,8 +50,9 @@ class Index(generics.ListAPIView):
 
 
 # 放后面防止循环导入发生冲突
-from .view.user import UserRegister, UserLogin
+from .view.user import UserRegister, UserLogin, GetBackPassword,TestEmail,TestEmail2, random_str
 from .view.userinfo import UserChkOldPwd, UserInfo
+
 
 
 

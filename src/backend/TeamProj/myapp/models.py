@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
-
+from datetime import datetime
 
 class User(models.Model):
     """
@@ -11,7 +11,7 @@ class User(models.Model):
     phone_num = models.CharField(max_length=11, verbose_name='电话')
     email = models.EmailField()
     create_time = models.DateTimeField(auto_now_add=True)
-    isActive = models.BooleanField()
+    isActive = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
@@ -28,6 +28,28 @@ class UserToken(models.Model):
     """用户token表"""
     user = models.OneToOneField('User', on_delete=models.CASCADE)  # 与用户一对一关系
     token = models.CharField(max_length=64, verbose_name='token')
+
+#邮箱验证类
+class EmailRecord(models.Model):
+    # 验证码
+    code = models.CharField(max_length=20, verbose_name='验证码')
+ 
+    # 用户邮箱
+    email = models.EmailField(max_length=50, verbose_name='用户邮箱')
+ 
+    #发送类型
+    send_choice = models.CharField(max_length=20,  verbose_name='发送类型')
+    
+    # 发送时间
+    send_time = models.DateTimeField(default=datetime.now, verbose_name='发送时间', null=True, blank=True)
+ 
+    # 过期时间
+    exprie_time = models.DateTimeField(null=True)
+ 
+ 
+    class Meta:
+        verbose_name = 'emailrecord'
+        verbose_name_plural = verbose_name
 
 
 # 标题、内容、文档基础信息、创建时间、修改时间、权限、作者信息(和user一对多)、评论(和user多对多)、分享连接(可通过id)
