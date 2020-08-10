@@ -64,7 +64,7 @@ export default {
             formLabelWidth: '80px'
         }
     },
-    create: function(){
+    created: function(){
         this.GetInfo();
     },
     watch:{
@@ -83,7 +83,7 @@ export default {
                         token: this.$store.state.token
                     }
                 }).then(res => {
-                    if(res.data.iinfo === 'success'){
+                    if(res.code === 200){
                         this.ChangeInfo();
                     }
                 }).catch(res => {
@@ -103,7 +103,7 @@ export default {
                         token: this.$store.state.token
                     }
                 }).then(res => {
-                    if(res.data.iinfo === 'success'){
+                    if(res.code === 200){
                         this.ChangeInfo();
                     }
                 }).catch(res => {
@@ -111,11 +111,19 @@ export default {
             });
         },
         GetInfo(){
-            Vue.axios.get('http://175.24.121.113:8000/myapp/user/info',{headers:{"token":this.$store.state.token}}).then(function(res){
+            Vue.axios.get(
+                'http://175.24.121.113:8000/myapp/user/info',
+                {
+                headers:{
+                    token:this.$store.state.token
+                    }
+                }
+            ).then(function(res){
                 this.form.name=res.data.username;
                 this.form.phone=res.data.phone_num;
                 this.form.ID=res.data.id;
                 this.form.email=res.data.email;
+                this.form.old_pwd='';
             }).catch(function(error){
                 console.log(error,Response);
             })
