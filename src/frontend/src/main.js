@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import Vuex from 'vuex'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import ElementUI from 'element-ui';
@@ -14,10 +15,27 @@ Vue.prototype.$qs = qs;
 
 Vue.use(ElementUI);
 Vue.use(VueAxios, axios)
+Vue.use(Vuex)
 
 Vue.config.productionTip = false
 
+const store =new Vuex.Store({
+  state:{
+    token:'123456'
+  },
+  mutations:{
+    exit(state){
+      state.token=''
+    },
+    login(state,new_token){
+      state.token=new_token
+    }
+  }
+})
+
 new Vue({
+  store:store,
   render: h => h(App),
   router,
 }).$mount('#app')
+

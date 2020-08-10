@@ -42,8 +42,26 @@ export default {
       }
     }
   },
-
+  //保存登录状态
+  created() {
+    console.log(sessionStorage.getItem("store"));
+    console.log(sessionStorage.length);
+    // 如果sessionStorage中存储了store
+    if (sessionStorage.getItem("store")) {
+      // replaceState 替换state根状态（参数为 对象）
+      this.$store.replaceState( Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem("store")))) 		                                         
+    }
+    //在页面刷新时将vuex里的信息保存到sessionStorage里
+    window.addEventListener("beforeunload",()=>{
+        sessionStorage.setItem("store", JSON.stringify(this.$store.state))
+    })
+  },
   methods: {
+    exit(){
+      console.log(this.$store.state.token)
+      this.$store.commit('exit')
+      console.log(this.$store.state.token)
+    },
     resetloginForm () {
       // console.log(this)
       this.$refs.loginFormRef.resetFields();
@@ -58,7 +76,9 @@ export default {
               console.log(res);
               if (res.code !== 200) return console.log('登录失败');
               // 这里后端返回了一个code就先用code看看效果
-              console.log('登录成功');
+              else{
+                console.log('登录成功');
+              }
 
               // this.$http.post('http://175.24.121.113:8000/myapp/login/',
               //     this.$qs.stringify(this.loginForm)
