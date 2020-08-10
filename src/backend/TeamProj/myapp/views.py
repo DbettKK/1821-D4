@@ -1,4 +1,5 @@
 from rest_framework.views import APIView, Response
+from django.contrib.auth.hashers import make_password, check_password
 from django.http import HttpResponseRedirect
 from rest_framework import generics
 from .models import User, UserToken
@@ -13,6 +14,22 @@ def md5(user):
     m = hashlib.md5(bytes(user, encoding='utf-8'))
     m.update(bytes(ctime, encoding='utf-8'))
     return m.hexdigest()
+
+
+def chk_token(token):
+    if token is None:
+        return Response({
+            'info': '用户未登录',
+            'code': 403
+        }, status=403)
+    u = UserToken.objects.filter(token=token)
+    if len(u) <= 0:
+        # token无效
+        return Response({
+            'info': '无效用户',
+            'code': 403
+        }, status=403)
+    return u.get().user_id
 
 
 class UserLogin(APIView):
@@ -86,7 +103,7 @@ class UserRegister(APIView):
                 }, status=403)
             u = User.objects.create(
                 username=username,
-                password=pwd,
+                password=make_password(pwd),
                 email=email,
                 phone_num=phone_num
             )
@@ -99,6 +116,70 @@ class UserRegister(APIView):
             'info': '用户名已注册',
             'code': 403
         }, status=403)
+
+
+class UserChkOldPwd(APIView):
+    def post(self, request):
+        token = request.META.get('HTTP_TOKEN')
+        print(token)
+        user_id = chk_token(token)
+        old_pwd = request.POST.get('old_password')
+        u = User.objects.get(pk=user_id)
+        if u.check_pwd(old_pwd):
+            return Response({
+                'info': 'success',
+                'code': 200,
+                'data': UserInfoSer(u).data
+            }, status=200)
+        else:
+            return Response({
+                'info': '旧密码错误',
+                'code': 403
+            }, status=403)
+
+
+class UserInfo(APIView):
+    def get(self, request):
+        token = request.META.get('HTTP_TOKEN')
+        print(token)
+        user_id = chk_token(token)
+        res = User.objects.get(pk=user_id)
+        return Response({
+                'info': 'success',
+                'code': 200,
+                'data': UserInfoSer(res).data
+            }, status=200)
+
+    def post(self, request):
+        token = request.META.get('HTTP_TOKEN')
+        print(token)
+        user_id = chk_token(token)
+        pwd = request.POST.get('new_password')
+        email = request.POST.get('email')
+        phone_num = request.POST.get('phone_num')
+        print(pwd)
+        print(email)
+        print(phone_num)
+        if not all([pwd, email, phone_num]):
+            return Response({
+                'info': '参数不完整',
+                'code': 400
+            }, status=400)
+        u = User.objects.get(pk=user_id)
+        if u.check_pwd(pwd):
+            return Response({
+                'info': '新密码不能与旧密码一样',
+                'code': 400
+            }, status=400)
+        u.password = make_password(pwd)
+        u.email = email
+        u.phone_num = phone_num
+        u.save()
+        return Response({
+            'info': 'success',
+            'code': 200,
+            'data': UserInfoSer(u).data
+        }, status=200)
 
 
 class UserInfoList(generics.ListAPIView):
@@ -116,4 +197,9 @@ class Index(generics.ListAPIView):
             return User.objects.filter(username=self.request.COOKIES.get('username'))
         else:
             return None
+
+
+
+
+
 
