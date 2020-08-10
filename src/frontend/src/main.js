@@ -27,7 +27,7 @@ Vue.config.productionTip = false
 
 const store =new Vuex.Store({
   state:{
-    token:'123456'
+    token:''
   },
   mutations:{
     exit(state){
