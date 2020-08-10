@@ -103,7 +103,7 @@ export default {
     background-color: #fff;
     img {
       width: 100%;
-      heigth: 100%;
+      height: 100%;
       border-radius: 50%;
       background-color: #eee;
     }
