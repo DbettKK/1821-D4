@@ -9,13 +9,22 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/Info', component: User
+      path: '/Info', 
+      component: User, 
+      name:'Info',
+      meta:{title:'个人空间'}
     },
     {
-      path: '/Login', component: Login
+      path: '/Login', 
+      component: Login,
+      name: 'Login',
+      meta:{title:'用户登录'}
     },
     {
-      path: '/', component: Home
+      path: '/', 
+      component: Home,
+      name: 'Home',
+      meta:{title:'金刚石文档编辑器'}
     }
   ]
 
