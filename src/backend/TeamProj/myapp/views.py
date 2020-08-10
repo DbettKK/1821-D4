@@ -2,7 +2,7 @@ from rest_framework.views import APIView, Response
 from django.http import HttpResponseRedirect
 from rest_framework import generics
 from .models import User, UserToken
-from .serializers import UserInfoSer,CreateUserSer
+from .serializers import UserInfoSer
 import hashlib
 import time
 
@@ -22,6 +22,7 @@ class UserLogin(APIView):
     # 登录不需要认证
 
     def post(self, request):
+        print(request.POST)
         username = request.POST.get('username')
         pwd = request.POST.get('password')
         print(username)
@@ -31,21 +32,21 @@ class UserLogin(APIView):
             return Response({
                 'info': '参数不完整',
                 'code': 400
-            })
+            }, status=400)
         try:
             user = User.objects.get(username=username)
         except:
             return Response({
                 'info': '用户名不存在',
                 'code': 403
-            },status=403)
+            }, status=403)
         if user.check_pwd(pwd):
             # 登录成功后生成token
             token = md5(username)
             UserToken.objects.update_or_create(user=user, defaults={'token': token})
             res = {'info': 'success', 'token': token, 'code': 200, 'data': UserInfoSer(user).data}
-            res=Response(res)
-            res.set_cookie('username',username,3600)
+            res = Response(res)
+            res.set_cookie('username', username, 3600, path='/')
             return res
         else:
             return Response({
@@ -54,11 +55,10 @@ class UserLogin(APIView):
             }, status=403)
 
 
-class UserRegister(generics.ListCreateAPIView):
+class UserRegister(APIView):
     """用户注册视图"""
     authentication_classes = []
-    queryset = User.objects.all()
-    serializer_class = CreateUserSer
+
     def post(self, request):
         '''
         关于COOKIES的验证
@@ -75,17 +75,30 @@ class UserRegister(generics.ListCreateAPIView):
             return Response({
                 'info': '参数不完整',
                 'code': 400
-            },status=400)
-        u = User.objects.create(
-            username=username,
-            password=pwd,
-            email=email,
-            phone_num=phone_num
-        )
-        res = {'info': 'success', 'code': 200, 'data': UserInfoSer(u).data}
-        res=Response(res)
-        res.set_cookie('username',username,3600,path='/')
-        return res
+            }, status=400)
+        try:
+            User.objects.get(username=username)
+        except:
+            if pwd != pwd2:
+                return Response({
+                    'info': '两次密码不一致',
+                    'code': 403
+                }, status=403)
+            u = User.objects.create(
+                username=username,
+                password=pwd,
+                email=email,
+                phone_num=phone_num
+            )
+            res = {'info': 'success', 'code': 200, 'data': UserInfoSer(u).data}
+            res = Response(res)
+            res.set_cookie('username', username, 3600, path='/')
+            return res
+
+        return Response({
+            'info': '用户名已注册',
+            'code': 403
+        }, status=403)
 
 
 class UserInfoList(generics.ListAPIView):
@@ -93,12 +106,14 @@ class UserInfoList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserInfoSer  # id, name, email, phone_num
 
+
 class Index(generics.ListAPIView):
     """假设是个主页"""
     serializer_class = UserInfoSer
+
     def get_queryset(self):
         if 'username' in self.request.COOKIES:
             return User.objects.filter(username=self.request.COOKIES.get('username'))
         else:
             return None
-        
+
