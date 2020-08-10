@@ -9,6 +9,7 @@
 
 ##### 请求URL
 ` http://175.24.121.113:8000/myapp/testemail `
+
 ##### 请求方式
 POST
 ##### 参数
@@ -100,6 +101,7 @@ POST
 |password2 |是  |string | 重复密码 |
 |email     |是  |string | 邮箱    |
 |phone_num     |是  |string | 手机号    |
+|code |是 |string | 验证码 |
 
 ##### 返回示例 
 
