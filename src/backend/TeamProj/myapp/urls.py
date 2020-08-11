@@ -24,5 +24,6 @@ urlpatterns = [
     path('file/favorite/', views.Favorites.as_view(), name='favorite'),
     path('file/cancelfavor/', views.CancelFavorite.as_view(), name='cancelfavorite'),
 
-    path('team/create/', views.createTeam.as_view(), name='create_team'),
+    path('team/create/', views.CreateTeam.as_view(), name='create_team'),
+    path('team/join/', views.JoinTeam.as_view(), name='join_team'),
 ]

@@ -81,6 +81,7 @@ class File(models.Model):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='文档创建时间')
     last_modified = models.DateTimeField(auto_now=True, verbose_name='文档最后一次修改时间')
 
+    is_delete = models.BooleanField(default=False, verbose_name='是否在回收站')
     modified_times = models.IntegerField(default=0, verbose_name='修改次数', null=True)
     modified_user = models.ManyToManyField(
         'User',
@@ -116,6 +117,9 @@ class File(models.Model):
 
     share = models.CharField(max_length=64, verbose_name='分享', null=True)
 
+    def __str__(self):
+        return self.file_title
+
 
 class Comment(models.Model):
     person = models.ForeignKey(
@@ -131,6 +135,9 @@ class Comment(models.Model):
     content = models.CharField(max_length=128, verbose_name='评论内容')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='评论创建时间')
 
+    def __str__(self):
+        return self.person.username + '评论' + self.file.file_title
+
 
 class Team(models.Model):
     creator = models.ForeignKey('User', on_delete=models.CASCADE, related_name='team_own', verbose_name='团队创建者')
@@ -143,6 +150,9 @@ class Team(models.Model):
     name = models.CharField(max_length=32, verbose_name='团队名称')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
+    def __str__(self):
+        return self.name
+
 
 class TeamMember(models.Model):
     permissions = (
@@ -154,11 +164,17 @@ class TeamMember(models.Model):
     join_time = models.DateTimeField(auto_now_add=True, verbose_name='加入时间')
     permission = models.IntegerField(choices=permissions, verbose_name='成员权限', default=5)
 
+    def __str__(self):
+        return self.member.username + '加入' + self.team.name
+
 
 class UserBrowseFile(models.Model):
     file = models.ForeignKey('File', on_delete=models.CASCADE, verbose_name='浏览的文档')
     person = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='浏览的用户')
     last_modified = models.DateTimeField(auto_now=True, verbose_name='最近一次浏览时间')
+
+    def __str__(self):
+        return self.person.username + '浏览' + self.file.file_title
 
 
 class UserKeptFile(models.Model):
@@ -166,9 +182,15 @@ class UserKeptFile(models.Model):
     person = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='收藏的用户')
     kept_time = models.DateTimeField(auto_now_add=True, verbose_name='收藏时间')
 
+    def __str__(self):
+        return self.person.username + '收藏' + self.file.file_title
+
 
 class Modify(models.Model):
     file = models.ForeignKey('File', on_delete=models.CASCADE, verbose_name='被修改的文档')
     person = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='修改的用户')
     time = models.DateTimeField(auto_now_add=True, verbose_name='修改时间')
     modify_times = models.IntegerField(default=0, verbose_name='修改次数')
+
+    def __str__(self):
+        return self.person.username + '修改' + self.file.file_title
