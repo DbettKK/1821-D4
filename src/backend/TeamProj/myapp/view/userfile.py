@@ -1,6 +1,8 @@
+import json
 from rest_framework.views import APIView, Response
 from myapp.models import User, File, UserBrowseFile, UserKeptFile, Team
 from myapp.views import chk_token
+from myapp.serializers import FileSer, UserKeptFileSer
 
 
 def chk_file_id(file_id):
@@ -60,13 +62,13 @@ class Favorites(APIView):
                 'code': 403,
             }, status=403)
 
-        UserKeptFile.objects.update_or_create(person=u, file=f)
-        ukf = UserKeptFile.objects.filter(person=u, file=f).values()
+        ukf = UserKeptFile.objects.update_or_create(person=u, file=f)[0]
+
         print(ukf)
         return Response({
             'info': 'success',
             'code': 200,
-            'data': ukf
+            'data': UserKeptFileSer(ukf).data
         }, status=200)
 
 
@@ -77,7 +79,6 @@ class CancelFavorite(APIView):
         print(token)
         print(file_id)
         user_id = chk_token(token)
-        user_id = chk_token(token)
         if isinstance(user_id, Response):
             return user_id
         u = User.objects.get(pk=user_id)
@@ -86,14 +87,15 @@ class CancelFavorite(APIView):
         if isinstance(f, Response):
             return f
         ukf = UserKeptFile.objects.filter(person=u, file=f)
+        res = UserKeptFileSer(ukf.get()).data
         print(ukf)
         if len(ukf) > 0:
-            file_id = ukf.get().file_id
+            # file_id = ukf.get().file_id
             ukf.get().delete()
             return Response({
                 'info': 'success',
                 'code': 200,
-                'data': [{'file_id': file_id}]
+                'data': res
             }, status=200)
 
         return Response({
@@ -116,11 +118,13 @@ class CreateFilePri(APIView):
             permission='5',
             creator=u
         )
-        f = File.objects.filter(pk=f.pk).values()
+
+        # f = File.objects.filter(pk=f.pk).values()
+
         return Response({
             'info': 'success',
             'code': 200,
-            'data': f
+            'data': FileSer(f).data
         }, status=200)
 
 
@@ -148,9 +152,10 @@ class CreateFileTeam(APIView):
             creator=u,
             team_belong=t
         )
-        f = File.objects.filter(pk=f.pk).values()
+        # f = File.objects.filter(pk=f.pk).values()
         return Response({
             'info': 'success',
             'code': 200,
-            'data': f
+            'data': FileSer(f).data
         }, status=200)
+

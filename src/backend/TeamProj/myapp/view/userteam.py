@@ -1,6 +1,7 @@
 from rest_framework.views import APIView, Response
 from myapp.models import User, File, UserBrowseFile, UserKeptFile, Team, TeamMember
 from myapp.views import chk_token
+from myapp.serializers import TeamMemberSer, TeamSer
 
 
 class CreateTeam(APIView):
@@ -21,11 +22,10 @@ class CreateTeam(APIView):
             creator=u,
             name=name
         )
-        t = Team.objects.filter(pk=t.pk).values()
         return Response({
             'info': 'success',
             'code': 200,
-            'data': t
+            'data': TeamSer(t).data
         }, status=200)
 
 
@@ -48,12 +48,11 @@ class JoinTeam(APIView):
                 'info': '你已经加入该团队',
                 'code': 403,
             }, status=403)
-        TeamMember.objects.create(team=t, member=u)
-        tm = TeamMember.objects.filter(team=t, member=u).values()
+        tm = TeamMember.objects.create(team=t, member=u)
         return Response({
             'info': 'success',
             'code': 200,
-            'data': tm
+            'data': TeamMemberSer(tm).data
         }, status=200)
 
 
@@ -77,12 +76,13 @@ class ExitTeam(APIView):
                 'info': '未加入该团队 无法退出',
                 'code': 403,
             }, status=403)
-        t_id = tm.get().team.pk
+        res = TeamMemberSer(tm.get()).data
+        # t_id = tm.get().team.pk
         tm.get().delete()
         return Response({
             'info': 'success',
             'code': 200,
-            'data': [{'team_id': t_id}]
+            'data': res
         }, status=200)
 
 

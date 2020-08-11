@@ -12,7 +12,8 @@ def chk_file_id(file_id):
             'code': 403,
         }, status=403)
     return f
-    
+
+
 class FileIsDelete(APIView):
     def post(self, request):
         token = request.META.get('HTTP_TOKEN')
@@ -27,8 +28,8 @@ class FileIsDelete(APIView):
         f = chk_file_id(file_id)
         if isinstance(f, Response):
             return f
-        if(f):
-            if(is_delete==False):
+        if f:
+            if is_delete == False:
                 f.is_delete = False
                 f.save()
             else:
@@ -44,6 +45,7 @@ class FileIsDelete(APIView):
             'code': 200,
         }, status=200)
 
+
 class FileRealDelete(APIView):
     def post(self, request):
         token = request.META.get('HTTP_TOKEN')
@@ -57,7 +59,7 @@ class FileRealDelete(APIView):
         f = chk_file_id(file_id)
         if isinstance(f, Response):
             return f
-        if(f):
+        if f:
             f.delete()
             return Response({
                 'info': 'success',
