@@ -64,13 +64,13 @@ class UserRegister(APIView):
                 'code': 400,
                 'registered': False,
             }, status=400)
-        if(User.objects.filter(email=email).count()!=0) :
+        if User.objects.filter(email=email):
             return Response({
                 'info': 'emailExist',
                 'code': 403,
                 'registered': False,
             }, status=403)
-        if(User.objects.filter(username=username).count()!=0) :
+        if User.objects.filter(username=username):
             return Response({
                 'info': 'usernameExist',
                 'code': 403,

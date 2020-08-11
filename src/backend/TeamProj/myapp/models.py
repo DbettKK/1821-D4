@@ -117,6 +117,9 @@ class File(models.Model):
 
     share = models.CharField(max_length=64, verbose_name='分享', null=True)
 
+    class Meta:
+        ordering = ['-create_time']
+
     def __str__(self):
         return self.file_title
 
@@ -134,6 +137,9 @@ class Comment(models.Model):
     )
     content = models.CharField(max_length=128, verbose_name='评论内容')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='评论创建时间')
+
+    class Meta:
+        ordering = ['-create_time']
 
     def __str__(self):
         return self.person.username + '评论' + self.file.file_title
@@ -164,6 +170,9 @@ class TeamMember(models.Model):
     join_time = models.DateTimeField(auto_now_add=True, verbose_name='加入时间')
     permission = models.IntegerField(choices=permissions, verbose_name='成员权限', default=5)
 
+    class Meta:
+        ordering = ['-join_time']
+
     def __str__(self):
         return self.member.username + '加入' + self.team.name
 
@@ -172,6 +181,9 @@ class UserBrowseFile(models.Model):
     file = models.ForeignKey('File', on_delete=models.CASCADE, verbose_name='浏览的文档')
     person = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='浏览的用户')
     last_modified = models.DateTimeField(auto_now=True, verbose_name='最近一次浏览时间')
+
+    class Meta:
+        ordering = ['-last_modified']
 
     def __str__(self):
         return self.person.username + '浏览' + self.file.file_title
@@ -182,6 +194,9 @@ class UserKeptFile(models.Model):
     person = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='收藏的用户')
     kept_time = models.DateTimeField(auto_now_add=True, verbose_name='收藏时间')
 
+    class Meta:
+        ordering = ['-kept_time']
+
     def __str__(self):
         return self.person.username + '收藏' + self.file.file_title
 
@@ -191,6 +206,9 @@ class Modify(models.Model):
     person = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='修改的用户')
     time = models.DateTimeField(auto_now_add=True, verbose_name='修改时间')
     modify_times = models.IntegerField(default=0, verbose_name='修改次数')
+
+    class Meta:
+        ordering = ['-time']
 
     def __str__(self):
         return self.person.username + '修改' + self.file.file_title

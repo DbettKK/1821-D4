@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Comment
 
 
 # class CreateUserSer(serializers.ModelSerializer):
@@ -30,3 +30,11 @@ class UserInfoSer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'phone_num')
+
+
+class CommentSer(serializers.ModelSerializer):
+    username = serializers.CharField(source='person.username')
+
+    class Meta:
+        model = Comment
+        fields = '__all__'
