@@ -31,10 +31,10 @@
                     </el-submenu>
                     <el-submenu index="2" style="background-color: rgb(238, 241, 246)">
                         <template slot="title"><i class="el-icon-menu"></i><span>工作站</span></template>
-                        <el-menu-item index="2-1">最近使用</el-menu-item>
-                        <el-menu-item index="2-2">我创建的</el-menu-item>
-                        <el-menu-item index="2-3">我的收藏</el-menu-item>
-                        <el-menu-item index="2-4">回收站</el-menu-item>
+                        <el-menu-item index="2-1" @click="recently">最近使用</el-menu-item>
+                        <el-menu-item index="2-2" @click="myproduction">我创建的</el-menu-item>
+                        <el-menu-item index="2-3" @click="favorite">我的收藏</el-menu-item>
+                        <el-menu-item index="2-4" @click="trashbin">回收站</el-menu-item>
                     </el-submenu>
                     <el-submenu index="3" style="background-color: rgb(238, 241, 246)">
                         <template slot="title"><i class="el-icon-s-claim"></i><span>团队空间</span></template>
@@ -74,6 +74,18 @@ export default {
         //折叠展开左菜单
         toggleCollapse() {
             this.isCollapse = !this.isCollapse
+        },
+        recently() {
+            this.$router.push('/recently')
+        },
+        myproduction() {
+            this.$router.push('/myproduction')
+        },
+        favorite() {
+            this.$router.push('/favorite')
+        },
+        trashbin() {
+            this.$router.push('/trashbin')
         }
     }
 }
