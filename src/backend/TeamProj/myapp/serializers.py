@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Comment, File, UserKeptFile, TeamMember, Team
 
 
 # class CreateUserSer(serializers.ModelSerializer):
@@ -27,6 +27,39 @@ from .models import User
 
 class UserInfoSer(serializers.ModelSerializer):
     """用户详情信息序列化器"""
+
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'phone_num')
+
+
+class CommentSer(serializers.ModelSerializer):
+    username = serializers.CharField(source='person.username')
+
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+
+class FileSer(serializers.ModelSerializer):
+    class Meta:
+        model = File
+        fields = '__all__'
+
+
+class UserKeptFileSer(serializers.ModelSerializer):
+    class Meta:
+        model = UserKeptFile
+        fields = '__all__'
+
+
+class TeamMemberSer(serializers.ModelSerializer):
+    class Meta:
+        model = TeamMember
+        fields = '__all__'
+
+
+class TeamSer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = '__all__'

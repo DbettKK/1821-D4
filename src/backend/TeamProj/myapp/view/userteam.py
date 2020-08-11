@@ -1,6 +1,7 @@
 from rest_framework.views import APIView, Response
 from myapp.models import User, File, UserBrowseFile, UserKeptFile, Team, TeamMember
 from myapp.views import chk_token
+from myapp.serializers import TeamMemberSer, TeamSer
 
 
 class CreateTeam(APIView):
@@ -21,11 +22,10 @@ class CreateTeam(APIView):
             creator=u,
             name=name
         )
-        t = Team.objects.filter(pk=t.pk).values()
         return Response({
             'info': 'success',
             'code': 200,
-            'data': t
+            'data': TeamSer(t).data
         }, status=200)
 
 
@@ -43,12 +43,46 @@ class JoinTeam(APIView):
             return user_id
         u = User.objects.get(pk=user_id)
         t = Team.objects.get(pk=team_id)
-        TeamMember.objects.create(team=t, member=u)
-        tm = TeamMember.objects.filter(team=t, member=u).values()
+        if TeamMember.objects.filter(team=t, member=u):
+            return Response({
+                'info': '你已经加入该团队',
+                'code': 403,
+            }, status=403)
+        tm = TeamMember.objects.create(team=t, member=u)
         return Response({
             'info': 'success',
             'code': 200,
-            'data': tm
+            'data': TeamMemberSer(tm).data
+        }, status=200)
+
+
+class ExitTeam(APIView):
+    def get(self, request):
+        token = request.META.get('HTTP_TOKEN')
+        team_id = request.GET.get('team_id')
+        if team_id is None:
+            return Response({
+                'info': '参数不完整',
+                'code': 400,
+            }, status=400)
+        user_id = chk_token(token)
+        if isinstance(user_id, Response):
+            return user_id
+        u = User.objects.get(pk=user_id)
+        t = Team.objects.get(pk=team_id)
+        tm = TeamMember.objects.filter(team=t, member=u)
+        if len(tm) <= 0:
+            return Response({
+                'info': '未加入该团队 无法退出',
+                'code': 403,
+            }, status=403)
+        res = TeamMemberSer(tm.get()).data
+        # t_id = tm.get().team.pk
+        tm.get().delete()
+        return Response({
+            'info': 'success',
+            'code': 200,
+            'data': res
         }, status=200)
 
 

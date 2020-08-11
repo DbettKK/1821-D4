@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <el-page-header @back="goBack" content="你的工作台"></el-page-header>
+    <Header></Header>
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">
@@ -74,6 +74,8 @@
   import 'quill/dist/quill.snow.css'
   import 'quill/dist/quill.bubble.css'
   
+  import Header from './header.vue' 
+
   //引入font.css 
   import '../../assets/css/font.css'
   
@@ -93,7 +95,8 @@
   export default {
     name: 'FuncFormsEdit',
     components: {
-      quillEditor
+      quillEditor,
+      Header
     },
     data() {
       return {
@@ -152,10 +155,6 @@
     font-size: 50px;
   }
   .background{
-    background-color: #EBEEF5;
-  }
-  .el-page-header{
-    margin-left: 10%;
+    background-color: #F2F6FC;
   }
 </style>
-

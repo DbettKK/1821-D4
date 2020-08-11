@@ -144,8 +144,6 @@ export default {
         .post('http://175.24.121.113:8000/myapp/email/', QS.stringify(this.loginForm))
         .then(response => {
               if (response.data.emailed) {
-                // 发送成功
-                this.$router.replace("/");
                 this.$message({
                     message: "发送成功",
                     type: "success",
@@ -185,7 +183,7 @@ export default {
                 // 注册成功
                 this.$router.replace("/");
                 this.$message({
-                    message: response.data.username,
+                    message: response.data.data.username,
                     type: "success",
                     customClass: "c-msg",
                     showClose: true
@@ -202,7 +200,7 @@ export default {
             })
             .catch(error => {
               this.$message({
-                message: "该页面出了点状况",
+                message: error.response.data.info,
                 type: "error",
                 customClass: "c-msg",
                 duration: 0,

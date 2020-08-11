@@ -6,6 +6,11 @@ import User from './components/user/UserInfo.vue'
 import Home from './components/user/home.vue'
 import Welcome from './components/user/welcome.vue'
 import Ue from './components/edit/ue.vue'
+import Recently from './components/user/recently.vue'
+import Myproduction from './components/user/myproduction.vue'
+import Favorite from './components/user/favorite.vue'
+import Trashbin from './components/user/trashbin.vue'
+
 
 Vue.use(Router)
 
@@ -35,7 +40,13 @@ const router = new Router({
       name: 'Home',
       meta:{title:'金刚石文档编辑器'},
       redirect: '/welcome',
-      children: [{path: '/welcome', component: Welcome,meta:{title:'金刚石文档编辑器'}}]
+      children: [
+        {path: '/welcome', component: Welcome,meta:{title:'金刚石文档编辑器'}},
+        {path: '/recently', component: Recently},
+        {path: '/myproduction', component: Myproduction},
+        {path: '/favorite', component: Favorite},
+        {path: '/trashbin', component: Trashbin}
+      ]
     },
     {
       path:'/Edit',
@@ -49,7 +60,7 @@ const router = new Router({
 
 //路由导航守卫
 /*router.beforeEach((to, from, next) => {
-  if (to.path === '/login') return next();
+  if (to.path === '/login' || to.path === '/Register' || to.path === '/welcome' || to.path === '/') return next();
   //获取token
   const tokenStr = window.sessionStorage.getItem('token')
   if (!tokenStr) return next('/login')
