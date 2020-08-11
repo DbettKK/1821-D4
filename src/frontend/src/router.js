@@ -21,7 +21,7 @@ const router = new Router({
       path: '/Login', 
       component: Login,
       name: 'Login',
-      meta:{title:'用户登录'}
+      meta:{title:'金刚石文档编辑器'}
     },
     {
       path: '/Register', 

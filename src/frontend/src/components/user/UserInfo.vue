@@ -30,7 +30,7 @@
                     </el-form-item>
                     <div>
                         <el-button type="info" round @click="dialogFormVisible=true">确认修改</el-button>
-                        <el-button type="return" round><router-link to="/">返回</router-link></el-button>
+                        <el-button type="return" round><router-link to="/" class="a">返回</router-link></el-button>
                     </div>
                     <el-dialog title="修改信息" :visible.sync="dialogFormVisible" width="400px">
                         <el-form :model="form">
@@ -171,5 +171,9 @@ export default {
         margin: 8px;
         vertical-align: middle;
         position: relative;
+    }
+    .a{
+        text-decoration: none;
+        background-color:rgb(255,255,255);
     }
 </style>

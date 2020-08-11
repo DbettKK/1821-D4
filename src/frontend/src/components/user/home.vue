@@ -5,10 +5,11 @@
                 <span class="name">金刚石文档</span>
             </div>
             <div>
-                <el-dropdown>
+                <el-dropdown trigger="click">
                     <i class="el-icon-setting" style="margin-right: 15px"></i>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
+                        <el-dropdown-item><router-link to="/changeinfo" class="a">修改密码及个人信息</router-link></el-dropdown-item>
                         <el-dropdown-item>注销账号</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -26,9 +27,6 @@
                             <template slot="title">个人信息</template>
                             <el-menu-item index="1-1">个人详情</el-menu-item>
                             <el-menu-item index="1-2">消息通知</el-menu-item>
-                        </el-menu-item-group>
-                        <el-menu-item-group title="账号与安全" style="background-color: rgb(238, 241, 246)">
-                            <el-menu-item index="1-3"><router-link to="/changeinfo">修改密码及个人信息</router-link></el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                     <el-submenu index="2" style="background-color: rgb(238, 241, 246)">
@@ -118,5 +116,9 @@ export default {
 }
 .el-menu-item {
     background-color: rgb(238, 241, 246)
+}
+.a{
+    text-decoration: none;
+    color:#333;
 }
 </style>
