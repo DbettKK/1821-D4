@@ -64,18 +64,18 @@ class UserRegister(APIView):
                 'code': 400,
                 'registered': False,
             }, status=400)
-        if(User.objects.fiter(email=email).count()!=0) :
+        if(User.objects.filter(email=email).count()!=0) :
             return Response({
                 'info': 'emailExist',
                 'code': 403,
                 'registered': False,
-            }, status=403)
-        if(User.objects.fiter(username=username).count()!=0) :
+            })
+        if(User.objects.filter(username=username).count()!=0) :
             return Response({
                 'info': 'usernameExist',
                 'code': 403,
                 'registered': False,
-            }, status=403)
+            })
         current_time = datetime.datetime.now()
         if EmailRecord.objects.filter(email=email, code=code, exprie_time__gte=current_time, send_choice='register'):
             u = User.objects.create(
@@ -92,7 +92,7 @@ class UserRegister(APIView):
                 'info': '注册失败',
                 'code': 403,
                 'registered': False,
-            }, status=403)
+            })
 
 
 class GetBackPassword(APIView):
