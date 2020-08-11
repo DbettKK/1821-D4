@@ -1,19 +1,20 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './components/user/login.vue'
-import User from './components/user/UserInfo.vue'
+import ChangeInfo from './components/user/userInfo.vue'
 import Home from './components/user/home.vue'
 import Welcome from './components/user/welcome.vue'
+import NotFoundComponent from './components/NotFoundComponent.vue'
 
 Vue.use(Router)
 
 const router = new Router({
   routes: [
     {
-      path: '/Info', 
-      component: User, 
-      name:'Info',
-      meta:{title:'个人空间'}
+      path: '/changeInfo', 
+      component: ChangeInfo, 
+      name:'ChangeInfo',
+      meta:{title:'修改密码及个人信息'}
     },
     {
       path: '/Login', 
@@ -27,10 +28,15 @@ const router = new Router({
       name: 'Home',
       meta:{title:'金刚石文档编辑器'},
       redirect: '/welcome',
-      children: [{path: '/welcome', component: Welcome}]
+      children: [{path: '/welcome', component: Welcome,meta:{title:'金刚石文档编辑器'}}]
+    },
+    {
+      path:'*',
+      component:NotFoundComponent,
+      meta:{title:'页面未找到'}
     }
-  ]
-
+  ],
+  mode:"history"
 })
 
 //路由导航守卫

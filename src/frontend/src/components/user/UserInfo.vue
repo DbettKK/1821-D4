@@ -28,7 +28,10 @@
                     <el-form-item label="ID">
                         <el-input v-model="form.ID" prefix-icon="el-icon-user" :disabled="true"></el-input>
                     </el-form-item>
-                    <el-button type="info" round @click="dialogFormVisible=true">确认修改</el-button>
+                    <div>
+                        <el-button type="info" round @click="dialogFormVisible=true">确认修改</el-button>
+                        <el-button type="return" round><router-link to="/">返回</router-link></el-button>
+                    </div>
                     <el-dialog title="修改信息" :visible.sync="dialogFormVisible" width="400px">
                         <el-form :model="form">
                             <el-form-item label="原始密码" :label-width="formLabelWidth">
