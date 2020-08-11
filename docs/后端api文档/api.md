@@ -374,14 +374,12 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "id": 3,
-            "file_id": 2,
-            "person_id": 10,
-            "kept_time": "2020-08-11T10:02:30.366545"
-        }
-    ]
+    "data": {
+        "id": 10,
+        "kept_time": "2020-08-11T16:48:35.248745",
+        "file": 10,
+        "person": 10
+    }
 }
 ```
 
@@ -408,7 +406,7 @@ POST方式
 
 ****
 
-### 4. 用户收藏文档接口
+### 4. 用户取消收藏文档接口
 
 ##### 描述
 
@@ -434,11 +432,12 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "file_id": 2
-        }
-    ]
+    "data": {
+        "id": 10,
+        "kept_time": "2020-08-11T16:48:35.248745",
+        "file": 10,
+        "person": 10
+    }
 }
 ```
 
@@ -489,22 +488,23 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "id": 4,
-            "file_title": "无标题",
-            "file_content": "",
-            "create_time": "2020-08-11T11:25:47.165467",
-            "last_modified": "2020-08-11T11:25:47.165467",
-            "modified_times": 0,
-            "type": "private",
-            "permission": 5,
-            "team_permission": null,
-            "creator_id": 10,
-            "team_belong_id": null,
-            "share": null
-        }
-    ]
+    "data": {
+        "id": 18,
+        "file_title": "无标题",
+        "file_content": "",
+        "create_time": "2020-08-11T16:47:19.604996",
+        "last_modified": "2020-08-11T16:47:19.604996",
+        "is_delete": false,
+        "modified_times": 0,
+        "type": "private",
+        "permission": "5",
+        "team_permission": null,
+        "share": null,
+        "creator": 10,
+        "team_belong": null,
+        "modified_user": [],
+        "comments": []
+    }
 }
 ```
 
@@ -552,22 +552,23 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "id": 4,
-            "file_title": "无标题",
-            "file_content": "",
-            "create_time": "2020-08-11T11:25:47.165467",
-            "last_modified": "2020-08-11T11:25:47.165467",
-            "modified_times": 0,
-            "type": "team",
-            "permission": 5,
-            "team_permission": 5,
-            "creator_id": 10,
-            "team_belong_id": 1,
-            "share": null
-        }
-    ]
+    "data": {
+        "id": 19,
+        "file_title": "无标题",
+        "file_content": "",
+        "create_time": "2020-08-11T16:47:47.181876",
+        "last_modified": "2020-08-11T16:47:47.181876",
+        "is_delete": false,
+        "modified_times": 0,
+        "type": "team",
+        "permission": "5",
+        "team_permission": "5",
+        "share": null,
+        "creator": 10,
+        "team_belong": 3,
+        "modified_user": [],
+        "comments": []
+    }
 }
 ```
 
@@ -615,14 +616,13 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "id": 2,
-            "creator_id": 10,
-            "name": "wo are a team",
-            "create_time": "2020-08-11T11:40:41.492048"
-        }
-    ]
+    "data": {
+        "id": 4,
+        "name": "wo are team team ",
+        "create_time": "2020-08-11T16:46:43.842592",
+        "creator": 10,
+        "members": []
+    }
 }
 ```
 
@@ -668,15 +668,13 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "id": 1,
-            "team_id": 2,
-            "member_id": 10,
-            "join_time": "2020-08-11T14:37:58.355800",
-            "permission": 5
-        }
-    ]
+    "data": {
+        "id": 2,
+        "join_time": "2020-08-11T16:42:20.758774",
+        "permission": 5,
+        "team": 3,
+        "member": 10
+    }
 }
 ```
 
@@ -724,11 +722,13 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "team_id": 2,
-        }
-    ]
+    "data": {
+        "id": 2,
+        "join_time": "2020-08-11T16:42:20.758774",
+        "permission": 5,
+        "team": 3,
+        "member": 10
+    }
 }
 ```
 
