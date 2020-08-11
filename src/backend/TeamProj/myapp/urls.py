@@ -23,7 +23,8 @@ urlpatterns = [
     path('file/create/team', views.CreateFileTeam.as_view(), name='create_team_file'),
     path('file/favorite/', views.Favorites.as_view(), name='favorite'),
     path('file/cancelfavor/', views.CancelFavorite.as_view(), name='cancelfavorite'),
-
+    path('file/isdelete/', views.FileIsDelete.as_view(), name='file_is_delete'),
+    path('file/realdelete/', views.FileRealDelete.as_view(), name='file_real_delete'),
     path('team/create/', views.CreateTeam.as_view(), name='create_team'),
     path('team/join/', views.JoinTeam.as_view(), name='join_team'),
 ]

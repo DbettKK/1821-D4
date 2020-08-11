@@ -154,4 +154,3 @@ class CreateFileTeam(APIView):
             'code': 200,
             'data': f
         }, status=200)
-

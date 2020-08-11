@@ -68,6 +68,7 @@ from .view.user import UserRegister, UserLogin, GetBackPassword, TestEmail, Test
 from .view.userinfo import UserChkOldPwd, UserInfo
 from .view.userfile import BrowseFile, Favorites, CancelFavorite, CreateFilePri, CreateFileTeam
 from .view.userteam import CreateTeam, JoinTeam
+from .view.userfiledelete import FileIsDelete,FileRealDelete
 
 
 
