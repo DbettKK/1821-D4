@@ -5,6 +5,7 @@ import Register from './components/user/register.vue'
 import User from './components/user/UserInfo.vue'
 import Home from './components/user/home.vue'
 import Welcome from './components/user/welcome.vue'
+import Ue from './components/edit/ue.vue'
 
 Vue.use(Router)
 
@@ -36,6 +37,12 @@ const router = new Router({
       meta:{title:'金刚石文档编辑器'},
       redirect: '/welcome',
       children: [{path: '/welcome', component: Welcome}]
+    },
+    {
+      path:'/Edit',
+      component:Ue,
+      name:'Edit',
+      meta:{title:'无'}
     }
   ]
 
