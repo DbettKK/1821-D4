@@ -18,6 +18,11 @@ urlpatterns = [
     path('user/info/', views.UserInfo.as_view(), name='userinfo'),
     path('user/modify/', views.UserChkOldPwd.as_view()),
     path('user/browse/', views.BrowseFile.as_view(), name='browsefile'),
+
+    path('file/create/pri', views.CreateFilePri.as_view(), name='create_pri_file'),
+    path('file/create/team', views.CreateFileTeam.as_view(), name='create_team_file'),
     path('file/favorite/', views.Favorites.as_view(), name='favorite'),
-    path('file/cancelfavor/', views.CancelFavorite.as_view(), name='favorite'),
+    path('file/cancelfavor/', views.CancelFavorite.as_view(), name='cancelfavorite'),
+
+    path('team/create/', views.createTeam.as_view(), name='create_team'),
 ]

@@ -1,9 +1,5 @@
-from django.forms import model_to_dict
-from rest_framework import serializers
 from rest_framework.views import APIView, Response
-from django.contrib.auth.hashers import make_password
-from myapp.models import User, File, UserBrowseFile, UserKeptFile
-from myapp.serializers import UserInfoSer
+from myapp.models import User, File, UserBrowseFile, UserKeptFile, Team
 from myapp.views import chk_token
 
 
@@ -104,3 +100,58 @@ class CancelFavorite(APIView):
             'info': '你未收藏过该文档, 无法删除',
             'code': 403,
         }, status=403)
+
+
+class CreateFilePri(APIView):
+    def get(self, request):
+        token = request.META.get('HTTP_TOKEN')
+        print(token)
+        user_id = chk_token(token)
+        if isinstance(user_id, Response):
+            return user_id
+        u = User.objects.get(pk=user_id)
+        f = File.objects.create(
+            file_content='',
+            type='private',
+            permission='5',
+            creator=u
+        )
+        f = File.objects.filter(pk=f.pk).values()
+        return Response({
+            'info': 'success',
+            'code': 200,
+            'data': f
+        }, status=200)
+
+
+class CreateFileTeam(APIView):
+    def get(self, request):
+        token = request.META.get('HTTP_TOKEN')
+        team_id = request.GET.get('team_id')
+        print(token)
+        user_id = chk_token(token)
+        if isinstance(user_id, Response):
+            return user_id
+        u = User.objects.get(pk=user_id)
+        t = Team.objects.filter(pk=team_id)
+        if len(t) <= 0:
+            return Response({
+                'info': '团队不存在',
+                'code': 403
+            }, status=403)
+        t = t.get()
+        f = File.objects.create(
+            file_content='',
+            type='team',
+            permission='5',
+            team_permission='5',
+            creator=u,
+            team_belong=t
+        )
+        f = File.objects.filter(pk=f.pk).values()
+        return Response({
+            'info': 'success',
+            'code': 200,
+            'data': f
+        }, status=200)
+

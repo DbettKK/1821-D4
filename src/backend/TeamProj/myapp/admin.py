@@ -10,4 +10,5 @@ admin.site.register(models.Team)
 admin.site.register(models.TeamMember)
 admin.site.register(models.UserBrowseFile)
 admin.site.register(models.UserKeptFile)
+admin.site.register(models.Modify)
 
