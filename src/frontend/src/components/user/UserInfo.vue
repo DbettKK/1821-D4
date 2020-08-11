@@ -49,6 +49,7 @@
 <script>
 import Vue from 'vue'
 export default {
+    name: "Userinfo",
     data(){
         return {
             form: {
