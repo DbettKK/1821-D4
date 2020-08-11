@@ -193,7 +193,7 @@ export default {
               } else {
                 // 注册失败
                   this.$message({
-                    message: response.data.error,
+                    message: response.data.info,
                     type: "error",
                     customClass: "c-msg",
                     showClose: true

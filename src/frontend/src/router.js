@@ -10,7 +10,6 @@ import Ue from './components/edit/ue.vue'
 Vue.use(Router)
 
 const router = new Router({
-  mode:'hash',
   routes: [
     {
       path: '/changeInfo', 

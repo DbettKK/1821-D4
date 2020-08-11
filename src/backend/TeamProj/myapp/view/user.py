@@ -61,8 +61,21 @@ class UserRegister(APIView):
         if not all([username, pwd, pwd2, email, phone_num, code]):
             return Response({
                 'info': '参数不完整',
-                'code': 400
+                'code': 400,
+                'registered': False,
             }, status=400)
+        if(User.objects.fiter(email=email).count()!=0) :
+            return Response({
+                'info': 'emailExist',
+                'code': 403,
+                'registered': False,
+            }, status=403)
+        if(User.objects.fiter(username=username).count()!=0) :
+            return Response({
+                'info': 'usernameExist',
+                'code': 403,
+                'registered': False,
+            }, status=403)
         current_time = datetime.datetime.now()
         if EmailRecord.objects.filter(email=email, code=code, exprie_time__gte=current_time, send_choice='register'):
             u = User.objects.create(
