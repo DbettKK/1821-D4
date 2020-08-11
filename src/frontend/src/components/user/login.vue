@@ -4,7 +4,7 @@
       <div class="avatar_box">
         <img src="../../assets/logo.png" alt="">
       </div>
-      <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_form">
+      <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_form"  >
         <el-form-item prop="username">
           <el-input placeholder="请输入账号" v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
         </el-form-item>
@@ -15,6 +15,8 @@
           <el-button type="primary" @click="login">登录</el-button>
           <el-button type="info" @click="resetloginForm">重置</el-button>
           <el-form-item><router-link to="/register" class=a>还未拥有账号？前往注册</router-link></el-form-item>
+        <!--  <el-form-item><router-link to="/FindPassword" class=a>已忘记密码？前往找回</router-link></el-form-item> -->
+        <el-form-item><router-link to="/FindPassword" class=a>已经忘记密码？前往找回</router-link></el-form-item>
         </el-form-item>
       </el-form>
     </div>
@@ -107,7 +109,7 @@ export default {
 
 .login_box {
   width: 450px;
-  height: 300px;
+  height: 380px;
   background-color: #fff;
   border-radius: 3px;
   position: absolute;
