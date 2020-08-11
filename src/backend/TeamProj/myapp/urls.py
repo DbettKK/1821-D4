@@ -18,4 +18,6 @@ urlpatterns = [
     path('user/info/', views.UserInfo.as_view(), name='userinfo'),
     path('user/modify/', views.UserChkOldPwd.as_view()),
     path('user/browse/', views.BrowseFile.as_view(), name='browsefile'),
+    path('file/favorite/', views.Favorites.as_view(), name='favorite'),
+    path('file/cancelfavor/', views.CancelFavorite.as_view(), name='favorite'),
 ]

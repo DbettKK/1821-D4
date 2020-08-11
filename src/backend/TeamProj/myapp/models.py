@@ -51,22 +51,19 @@ class UserToken(models.Model):
 class EmailRecord(models.Model):
     # 验证码
     code = models.CharField(max_length=20, verbose_name='验证码')
-
     # 用户邮箱
     email = models.EmailField(max_length=50, verbose_name='用户邮箱')
-
     # 发送类型
     send_choice = models.CharField(max_length=20, verbose_name='发送类型')
-
     # 发送时间
     send_time = models.DateTimeField(default=datetime.now, verbose_name='发送时间', null=True, blank=True)
-
     # 过期时间
     exprie_time = models.DateTimeField(null=True)
 
     class Meta:
         verbose_name = 'emailrecord'
         verbose_name_plural = verbose_name
+
 
 # 标题、内容、文档基础信息、创建时间、修改时间、权限、作者信息(和user一对多)、评论(和user多对多)、分享连接(可通过id)
 class File(models.Model):
@@ -83,6 +80,7 @@ class File(models.Model):
     file_content = models.CharField(max_length=128, verbose_name='文档内容')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='文档创建时间')
     last_modified = models.DateTimeField(auto_now=True, verbose_name='文档最后一次修改时间')
+    modified_times = models.IntegerField(default=0, verbose_name='修改次数', null=True)
     type = models.CharField(max_length=32, choices=types, verbose_name='文档类型')
     permission = models.IntegerField(choices=permissions, verbose_name='总权限')
     team_permission = models.IntegerField(choices=team_permissions, verbose_name='团队内部权限', null=True)
@@ -138,13 +136,13 @@ class Team(models.Model):
 
 class TeamMember(models.Model):
     permissions = (
-        (1, '可查看'), (2, '可评论'), (3, '可修改'), (4, '可分享')
+        (1, '可查看'), (2, '可评论'), (3, '可修改'), (4, '可分享'), (5, 'all')
     )
 
     team = models.ForeignKey('Team', on_delete=models.CASCADE, verbose_name='所属团队')
     member = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='团队成员')
     join_time = models.DateTimeField(auto_now_add=True, verbose_name='加入时间')
-    permission = models.IntegerField(choices=permissions, verbose_name='成员权限')
+    permission = models.IntegerField(choices=permissions, verbose_name='成员权限', default=5)
 
 
 class UserBrowseFile(models.Model):
