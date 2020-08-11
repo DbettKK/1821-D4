@@ -10,6 +10,8 @@ class UserChkOldPwd(APIView):
         token = request.META.get('HTTP_TOKEN')
         print(token)
         user_id = chk_token(token)
+        if isinstance(user_id, Response):
+            return user_id
         old_pwd = request.POST.get('old_password')
         u = User.objects.get(pk=user_id)
         if u.check_pwd(old_pwd):
@@ -30,6 +32,8 @@ class UserInfo(APIView):
         token = request.META.get('HTTP_TOKEN')
         print(token)
         user_id = chk_token(token)
+        if isinstance(user_id, Response):
+            return user_id
         res = User.objects.get(pk=user_id)
         return Response({
             'info': 'success',
@@ -41,6 +45,8 @@ class UserInfo(APIView):
         token = request.META.get('HTTP_TOKEN')
         print(token)
         user_id = chk_token(token)
+        if isinstance(user_id, Response):
+            return user_id
         pwd = request.POST.get('new_password')
         email = request.POST.get('email')
         phone_num = request.POST.get('phone_num')

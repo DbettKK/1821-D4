@@ -72,12 +72,13 @@ class UserRegister(APIView):
                 phone_num=phone_num,
                 isActive=True
             )
-            res = {'info': 'success', 'code': 200, 'data': UserInfoSer(u).data}
+            res = {'info': 'success','registered':True, 'code': 200, 'data': UserInfoSer(u).data}
             return Response(res)
         else:
             return Response({
-                'info': '验证码错误',
-                'code': 403
+                'info': '注册失败',
+                'code': 403,
+                'registered': False,
             }, status=403)
 
 
@@ -131,14 +132,22 @@ class TestEmail2(APIView):
                        '您本次修改的验证码为：{0},验证码将在5分钟后失效<br>'.format(code)
         sender = settings.EMAIL_FROM
         # 　发送邮件
-        send_mail(subject, message, sender, receiver, html_message=html_message)
+        send_result=send_mail(subject, message, sender, receiver, html_message=html_message)
         time_delta = datetime.datetime.now() + datetime.timedelta(minutes=5)
         email_record = EmailRecord.objects.create(email=request.POST.get('email'), code=code, exprie_time=time_delta,
                                                   send_choice='findpassword')
-        return Response({
-            'info': '发送成功',
-            'code': 200
-        })
+        if(send_result==1):
+            return Response({
+                'info': True,
+                'code': 200,
+                'emailed':True
+            })
+        else:
+            return Response({
+                'info': False,
+                'code': 400,
+                'emailed':False
+            })
 
 
 class TestEmail(APIView):
@@ -163,11 +172,19 @@ class TestEmail(APIView):
             # 发送者
         sender = settings.EMAIL_FROM
         # 　发送邮件
-        send_mail(subject, message, sender, receiver, html_message=html_message)
+        send_result=send_mail(subject, message, sender, receiver, html_message=html_message)
         time_delta = datetime.datetime.now() + datetime.timedelta(minutes=5)
         email_record = EmailRecord.objects.create(email=request.POST.get('email'), code=code, exprie_time=time_delta,
                                                   send_choice='register')
-        return Response({
-            'info': '发送成功',
-            'code': 200
-        })
+        if(send_result==1):
+            return Response({
+                'info': True,
+                'code': 200,
+                'emailed':True
+            })
+        else:
+            return Response({
+                'info': False,
+                'code': 400,
+                'emailed':False
+            })
