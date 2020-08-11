@@ -38,6 +38,30 @@
                     </el-submenu>
                     <el-submenu index="3" style="background-color: rgb(238, 241, 246)">
                         <template slot="title"><i class="el-icon-s-claim"></i><span>团队空间</span></template>
+                        <el-menu-item><el-button @click="joinTeamVisible=true">加入团队</el-button></el-menu-item>
+                        <el-dialog title="加入团队" :visible.sync="joinTeamVisible" width="400px">
+                        <el-form :model="join">
+                            <el-form-item label="要加入的团队ID" :label-width="formLabelWidth">
+                                <el-input v-model="join.team_id" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <div>
+                                <el-button @click="joinTeamVisible = false">取 消</el-button>
+                                <el-button type="primary" @click="joinTeam()">确 定</el-button>
+                            </div>
+                        </el-form>
+                        </el-dialog>
+                        <el-menu-item><el-button @click="createTeamVisible=true">创建团队</el-button></el-menu-item>
+                        <el-dialog title="创建团队" :visible.sync="createTeamVisible" width="400px">
+                        <el-form :model="create">
+                            <el-form-item label="要创建的团队名称" :label-width="formLabelWidth">
+                                <el-input v-model="create.team_name" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <div>
+                                <el-button @click="createTeamVisible = false">取 消</el-button>
+                                <el-button type="primary" @click="createTeam()">确 定</el-button>
+                            </div>
+                        </el-form>
+                        </el-dialog>
                     </el-submenu>
                 </el-menu>
             </el-aside>
@@ -50,11 +74,20 @@
 </template>
 
 <script>
+import Vue from 'vue'
 export default {
     data() {
         return {
             userinfo: [],
-            isCollapse: false
+            isCollapse: false,
+            joinTeamVisible:false,
+            join:{
+                team_id:0
+            },
+            createTeamVisible:false,
+            create:{
+                team_name:""
+            }
         }
     },
     created() {
@@ -74,6 +107,51 @@ export default {
         //折叠展开左菜单
         toggleCollapse() {
             this.isCollapse = !this.isCollapse
+        },
+        joinTeam(){
+            this.joinTeamVisible=false;
+            Vue.axios.get(
+                "http://175.24.121.113:8000/myapp/team/join/",
+                {
+                    team_id:this.joinTeam.team_id
+                },
+                {
+                    headers: {
+                        token: this.$store.state.token
+                    }
+                }
+            ).then(res=>{
+                if(res.code===200){
+                    alert(res.info);
+                }
+                else if(res.code===400){
+                    alert(res.info);
+                }
+            }
+            ).catch(res=>{
+                console.log(res);
+            })
+        },
+        createTeam(){
+            this.createTeamVisible=false;
+            Vue.axios.post(
+                "http://175.24.121.113:8000/myapp/team/create/",
+                {
+                    team_name:this.createTeam.team_name
+                },
+                {
+                    headers: {
+                        token: this.$store.state.token
+                    }
+                }
+            ).then(res=>{
+                if(res.code===200){
+                    alert(res.info);
+                    alert("你的新团队:"+res.data.name+" id:"+res.data.id+"成功创建！");
+                }
+            }).catch(res=>{
+                console.log(res);
+            });
         }
     }
 }
