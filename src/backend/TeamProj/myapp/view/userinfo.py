@@ -32,10 +32,10 @@ class UserInfo(APIView):
         user_id = chk_token(token)
         res = User.objects.get(pk=user_id)
         return Response({
-                'info': 'success',
-                'code': 200,
-                'data': UserInfoSer(res).data
-            }, status=200)
+            'info': 'success',
+            'code': 200,
+            'data': UserInfoSer(res).data
+        }, status=200)
 
     def post(self, request):
         token = request.META.get('HTTP_TOKEN')
@@ -56,8 +56,8 @@ class UserInfo(APIView):
         if u.check_pwd(pwd):
             return Response({
                 'info': '新密码不能与旧密码一样',
-                'code': 400
-            }, status=400)
+                'code': 403
+            }, status=403)
         u.password = make_password(pwd)
         u.email = email
         u.phone_num = phone_num

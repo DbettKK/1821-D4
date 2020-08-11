@@ -39,9 +39,7 @@ class UserLogin(APIView):
             token = md5(username)
             UserToken.objects.update_or_create(user=user, defaults={'token': token})
             res = {'info': 'success', 'token': token, 'code': 200, 'data': UserInfoSer(user).data}
-            res = Response(res)
-            res.set_cookie('username', username, 3600, path='/')
-            return res
+            return Response(res)
         else:
             return Response({
                 'info': '密码错误',
@@ -54,24 +52,19 @@ class UserRegister(APIView):
     authentication_classes = []
 
     def post(self, request):
-        """
-        关于COOKIES的验证
-        if 'username' in request.COOKIES:
-            return HttpResponseRedirect('/myapp/userinfo')
-        """
         username = request.POST.get('username')
         pwd = request.POST.get('password')
         pwd2 = request.POST.get('password2')
         email = request.POST.get('email')
         phone_num = request.POST.get('phone_num')
-        code=request.POST.get('code')
+        code = request.POST.get('code')
         if not all([username, pwd, pwd2, email, phone_num, code]):
             return Response({
                 'info': '参数不完整',
                 'code': 400
-            },status=400)
+            }, status=400)
         current_time = datetime.datetime.now()
-        if EmailRecord.objects.filter(email=email,code=code,exprie_time__gte=current_time, send_choice='register'):
+        if EmailRecord.objects.filter(email=email, code=code, exprie_time__gte=current_time, send_choice='register'):
             u = User.objects.create(
                 username=username,
                 password=make_password(pwd),
@@ -80,14 +73,12 @@ class UserRegister(APIView):
                 isActive=True
             )
             res = {'info': 'success', 'code': 200, 'data': UserInfoSer(u).data}
-            res=Response(res)
-            res.set_cookie('username', username, 3600, path='/')
-            return res
+            return Response(res)
         else:
             return Response({
-                'info':'验证码错误',
-                'code':403
-            },status=403)
+                'info': '验证码错误',
+                'code': 403
+            }, status=403)
 
 
 class GetBackPassword(APIView):
@@ -96,34 +87,28 @@ class GetBackPassword(APIView):
 
     def post(self, request):
         username = request.POST.get('username')
-        email= request.POST.get('email')
+        email = request.POST.get('email')
         pwd_new = request.POST.get('password_new')
         code = request.POST.get('code')
         if not all([username, pwd_new]):
             return Response({
                 'info': '参数不完整',
                 'code': 400
-            })
+            }, status=400)
         current_time = datetime.datetime.now()
-        if EmailRecord.objects.filter(email=email,code=code,exprie_time_gte=current_time, send_choice='findpassword'):
-            user=User.objects.filter(username=username)
+        if EmailRecord.objects.filter(email=email, code=code, exprie_time_gte=current_time, send_choice='findpassword'):
+            user = User.objects.filter(username=username)
             user.password = make_password(pwd_new)
             user.save()
-            return Response(
-                {
-                    'info':'找回成功',
-                    'code': 200
-                },
-                status=200
-            )
+            return Response({
+                'info': '找回成功',
+                'code': 200
+            }, status=200)
         else:
-            return Response(
-                {
-                    'info':'密码错误',
-                    'code':400
-                },
-                status=400
-            )
+            return Response({
+                'info': '验证码错误',
+                'code': 403
+            }, status=403)
 
 
 class TestEmail2(APIView):
@@ -151,12 +136,13 @@ class TestEmail2(APIView):
         email_record = EmailRecord.objects.create(email=request.POST.get('email'), code=code, exprie_time=time_delta,
                                                   send_choice='findpassword')
         return Response({
-            'info': True
+            'info': '发送成功',
+            'code': 200
         })
 
 
 class TestEmail(APIView):
-    '''注册的邮箱api'''
+    """注册的邮箱api"""
     authentication_classes = []
 
     def post(self, request):
@@ -182,5 +168,6 @@ class TestEmail(APIView):
         email_record = EmailRecord.objects.create(email=request.POST.get('email'), code=code, exprie_time=time_delta,
                                                   send_choice='register')
         return Response({
-            'info': True
+            'info': '发送成功',
+            'code': 200
         })
