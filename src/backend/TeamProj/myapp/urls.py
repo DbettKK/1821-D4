@@ -3,14 +3,19 @@ from . import views
 
 app_name = 'myapp'
 urlpatterns = [
+    # 后端自用api
+    path('', views.Index.as_view(), name='index'),
+    path('userlist/', views.UserInfoList.as_view(), name='userList'),
+    
+    # 不需要token的api
     path('register/', views.UserRegister.as_view(), name='register'),
     path('login/', views.UserLogin.as_view(), name='login'),
-    path('user/list/', views.UserInfoList.as_view(), name='userList'),
+    path('email/', views.TestEmail.as_view(), name='email'),
+    path('email2/', views.TestEmail2.as_view(), name='email2'),
+    path('findpassword/', views.GetBackPassword.as_view(), name='getbackpassword'),
+
+    # 需要token的api   最好前面跟个子目录
     path('user/info/', views.UserInfo.as_view(), name='userinfo'),
     path('user/modify/', views.UserChkOldPwd.as_view()),
     path('user/browse/', views.BrowseFile.as_view(), name='browsefile'),
-    path('', views.Index.as_view(), name='index'),
-    path('testemail/', views.TestEmail.as_view(), name='testemail'),
-    path('testemail2/', views.TestEmail2.as_view(), name='testemail2'),
-    path('findpassword/', views.GetBackPassword.as_view(), name='getbackpassword'),
 ]
