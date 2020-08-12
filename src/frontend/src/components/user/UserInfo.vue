@@ -39,7 +39,7 @@
                             </el-form-item>
                             <div>
                                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                                <el-button type="primary" @click="ChangeInfo">确 定</el-button>
+                                <el-button type="primary" @click="CheckPwd">确 定</el-button>
                             </div>
                         </el-form>
                     </el-dialog>
@@ -82,16 +82,16 @@ export default {
             console.log('old_password='+this.form.old_pwd);
             Vue.axios.post(
                 'http://175.24.121.113:8000/myapp/user/modify/',
-                {
+                this.$qs.stringify({
                     old_password: this.form.old_pwd
-                },
+                }),
                 {
                     headers: {
                         'token': this.token
                     }
                 }).then(res => {
                     console.log(res);
-                    //this.ChangeInfo();
+                    this.ChangeInfo();
                 }).catch(res => {
                     console.log(res);
             });
@@ -99,7 +99,7 @@ export default {
         ChangeInfo(){
             this.dialogFormVisible = false;
             Vue.axios.post(
-                "http://175.24.121.113:8000/myapp/user/info/",this.$qs.stringfy({
+                "http://175.24.121.113:8000/myapp/user/info/",this.$qs.stringify({
                     new_password:this.form.password,
                     email:this.form.email,
                     phone_num:this.form.phone
