@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <Header></Header>
+    <Header :url="url"></Header>
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">
@@ -62,6 +62,7 @@
         </el-footer>
       </el-container>
     </el-card>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -75,6 +76,7 @@
   import 'quill/dist/quill.bubble.css'
   
   import Header from './header.vue' 
+  import Footer from './footer.vue'
 
   //引入font.css 
   import '../../assets/css/font.css'
@@ -96,12 +98,14 @@
     name: 'FuncFormsEdit',
     components: {
       quillEditor,
-      Header
+      Header,
+      Footer
     },
     data() {
       return {
         content: null,
         title:'Title',
+        url:'//',
         editorOption: {
           placeholder: "请输入",
           theme: "snow", // or 'bubble' 
@@ -123,10 +127,12 @@
           message: '您已成功提交修改！',
           type: 'success'
         });
-      }
+      },
     },
     created(){
       document.title=this.title;
+      this.url=this.$route.path;
+      console.log(this.$route.path)
     }
   }
 </script>
@@ -134,7 +140,7 @@
 <style scoped>
   .el-card{
     padding-top: 5px;
-    width: 80%;
+    width: 65%;
     margin:0 auto;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     border-radius: 2px;
